@@ -1,0 +1,17 @@
+COLUMN TABLE com_sap_cic_pdp_SchedulerRun (
+  ID NVARCHAR(36) NOT NULL,
+  createdAt TIMESTAMP,
+  createdBy NVARCHAR(255),
+  modifiedAt TIMESTAMP,
+  modifiedBy NVARCHAR(255),
+  schedulerRunID NVARCHAR(128),
+  schedulerID_ID NVARCHAR(36),
+  executionTimeStamp TIMESTAMP,
+  nextRunTimeStamp TIMESTAMP,
+  runStatus NVARCHAR(10),
+  runState NVARCHAR(10),
+  statusMessage NVARCHAR(50),
+  PRIMARY KEY(ID)
+) WITH ASSOCIATIONS (
+  MANY TO ONE JOIN com_sap_cic_pdp_Scheduler AS schedulerID ON (schedulerID.ID = schedulerID_ID)
+)

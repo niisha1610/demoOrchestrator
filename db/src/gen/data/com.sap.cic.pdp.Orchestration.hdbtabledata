@@ -1,0 +1,37 @@
+{
+  "format_version": 1,
+  "imports": [
+    {
+      "target_table": "COM_SAP_CIC_PDP_ORCHESTRATION",
+      "source_data": {
+        "data_type": "CSV",
+        "file_name": "com.sap.cic.pdp.Orchestration.csv",
+        "has_header": true,
+        "type_config": {
+          "delimiter": ";"
+        }
+      },
+      "import_settings": {
+        "import_columns": [
+          "ID",
+          "CREATEDAT",
+          "CREATEDBY",
+          "MODIFIEDAT",
+          "MODIFIEDBY",
+          "ORCHESTRATIONID",
+          "ORCHESTRATIONTYPE_CODE"
+        ],
+        "include_filter": []
+      },
+      "column_mappings": {
+        "ID": "ID",
+        "CREATEDAT": "createdAt",
+        "CREATEDBY": "createdBy",
+        "MODIFIEDAT": "modifiedAt",
+        "MODIFIEDBY": "modifiedBy",
+        "ORCHESTRATIONID": "orchestrationId",
+        "ORCHESTRATIONTYPE_CODE": "orchestrationType_code"
+      }
+    }
+  ]
+}

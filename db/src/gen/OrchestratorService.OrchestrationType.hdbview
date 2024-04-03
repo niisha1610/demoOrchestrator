@@ -1,0 +1,10 @@
+VIEW OrchestratorService_OrchestrationType AS SELECT
+  OrchestrationType_0.name,
+  OrchestrationType_0.descr,
+  OrchestrationType_0.code,
+  OrchestrationType_0.criticality
+FROM com_sap_cic_pdp_OrchestrationType AS OrchestrationType_0
+WITH ASSOCIATIONS (
+  MANY TO MANY JOIN OrchestratorService_OrchestrationType_texts AS texts ON (texts.code = code),
+  MANY TO ONE JOIN OrchestratorService_OrchestrationType_texts AS localized ON (localized.code = code AND localized.locale = SESSION_CONTEXT('LOCALE'))
+)

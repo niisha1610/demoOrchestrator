@@ -1,0 +1,6 @@
+VIEW OrchestratorService_JobStatus_texts AS SELECT
+  texts_0.locale,
+  texts_0.name,
+  texts_0.descr,
+  texts_0.code
+FROM com_sap_cic_pdp_JobStatus_texts AS texts_0

@@ -1,0 +1,8 @@
+VIEW com_sap_cic_pdp_V_SchedulerRun AS SELECT
+  sr_0.schedulerRunID,
+  sr_0.executionTimeStamp,
+  dbj_1.jobId,
+  dbj_1.jobName,
+  orchestrationType_3.name,
+  sr_0.runStatus
+FROM (((com_sap_cic_pdp_SchedulerRun AS sr_0 INNER JOIN com_sap_cic_pdp_DatabricksJobs AS dbj_1 ON sr_0.ID = dbj_1.schedulerRunID_ID) INNER JOIN com_sap_cic_pdp_Orchestration AS o_2 ON dbj_1.orchestrationID_ID = o_2.ID) LEFT JOIN com_sap_cic_pdp_OrchestrationType AS orchestrationType_3 ON o_2.orchestrationType_code = orchestrationType_3.code)

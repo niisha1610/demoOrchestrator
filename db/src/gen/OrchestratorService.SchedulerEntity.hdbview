@@ -1,0 +1,18 @@
+VIEW OrchestratorService_SchedulerEntity AS SELECT
+  Scheduler_0.ID,
+  Scheduler_0.createdAt,
+  Scheduler_0.createdBy,
+  Scheduler_0.modifiedAt,
+  Scheduler_0.modifiedBy,
+  Scheduler_0.schedulerJobID,
+  Scheduler_0.schedulerID,
+  Scheduler_0.schedulerName,
+  Scheduler_0.schedulerDescription,
+  Scheduler_0.startTime,
+  Scheduler_0.endTime,
+  Scheduler_0.reccurance,
+  Scheduler_0.orchestration_ID
+FROM com_sap_cic_pdp_Scheduler AS Scheduler_0
+WITH ASSOCIATIONS (
+  MANY TO ONE JOIN OrchestratorService_OrchestratorEntity AS orchestration ON (orchestration.ID = orchestration_ID)
+)

@@ -1,0 +1,18 @@
+COLUMN TABLE com_sap_cic_pdp_DatabricksJobs (
+  ID NVARCHAR(36) NOT NULL,
+  createdAt TIMESTAMP,
+  createdBy NVARCHAR(255),
+  modifiedAt TIMESTAMP,
+  modifiedBy NVARCHAR(255),
+  jobId NVARCHAR(128) NOT NULL,
+  jobName NVARCHAR(255),
+  jobStatus_code NVARCHAR(5000),
+  jobRunID NVARCHAR(128),
+  orchestrationID_ID NVARCHAR(36),
+  schedulerRunID_ID NVARCHAR(36),
+  PRIMARY KEY(ID, jobId)
+) WITH ASSOCIATIONS (
+  MANY TO ONE JOIN com_sap_cic_pdp_JobStatus AS jobStatus ON (jobStatus.code = jobStatus_code),
+  MANY TO ONE JOIN com_sap_cic_pdp_Orchestration AS orchestrationID ON (orchestrationID.ID = orchestrationID_ID),
+  MANY TO ONE JOIN com_sap_cic_pdp_SchedulerRun AS schedulerRunID ON (schedulerRunID.ID = schedulerRunID_ID)
+)

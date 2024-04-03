@@ -1,0 +1,18 @@
+COLUMN TABLE com_sap_cic_pdp_Scheduler (
+  ID NVARCHAR(36) NOT NULL,
+  createdAt TIMESTAMP,
+  createdBy NVARCHAR(255),
+  modifiedAt TIMESTAMP,
+  modifiedBy NVARCHAR(255),
+  schedulerJobID BIGINT,
+  schedulerID NVARCHAR(128),
+  schedulerName NVARCHAR(20),
+  schedulerDescription NVARCHAR(50),
+  startTime TIMESTAMP,
+  endTime TIMESTAMP,
+  reccurance NVARCHAR(50),
+  orchestration_ID NVARCHAR(36),
+  PRIMARY KEY(ID)
+) WITH ASSOCIATIONS (
+  MANY TO ONE JOIN com_sap_cic_pdp_Orchestration AS orchestration ON (orchestration.ID = orchestration_ID)
+)

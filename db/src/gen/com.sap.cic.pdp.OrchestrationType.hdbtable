@@ -1,0 +1,10 @@
+COLUMN TABLE com_sap_cic_pdp_OrchestrationType (
+  name NVARCHAR(255),
+  descr NVARCHAR(1000),
+  code INTEGER NOT NULL,
+  criticality INTEGER,
+  PRIMARY KEY(code)
+) WITH ASSOCIATIONS (
+  MANY TO MANY JOIN com_sap_cic_pdp_OrchestrationType_texts AS texts ON (texts.code = code),
+  MANY TO ONE JOIN com_sap_cic_pdp_OrchestrationType_texts AS localized ON (localized.code = code AND localized.locale = SESSION_CONTEXT('LOCALE'))
+)

@@ -1,0 +1,12 @@
+COLUMN TABLE com_sap_cic_pdp_Orchestration (
+  ID NVARCHAR(36) NOT NULL,
+  createdAt TIMESTAMP,
+  createdBy NVARCHAR(255),
+  modifiedAt TIMESTAMP,
+  modifiedBy NVARCHAR(255),
+  orchestrationId NVARCHAR(36),
+  orchestrationType_code INTEGER,
+  PRIMARY KEY(ID)
+) WITH ASSOCIATIONS (
+  MANY TO ONE JOIN com_sap_cic_pdp_OrchestrationType AS orchestrationType ON (orchestrationType.code = orchestrationType_code)
+)

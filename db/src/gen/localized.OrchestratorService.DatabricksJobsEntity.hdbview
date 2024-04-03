@@ -1,0 +1,18 @@
+VIEW localized_OrchestratorService_DatabricksJobsEntity AS SELECT
+  DatabricksJobs_0.ID,
+  DatabricksJobs_0.createdAt,
+  DatabricksJobs_0.createdBy,
+  DatabricksJobs_0.modifiedAt,
+  DatabricksJobs_0.modifiedBy,
+  DatabricksJobs_0.jobId,
+  DatabricksJobs_0.jobName,
+  DatabricksJobs_0.jobStatus_code,
+  DatabricksJobs_0.jobRunID,
+  DatabricksJobs_0.orchestrationID_ID,
+  DatabricksJobs_0.schedulerRunID_ID
+FROM localized_com_sap_cic_pdp_DatabricksJobs AS DatabricksJobs_0
+WITH ASSOCIATIONS (
+  MANY TO ONE JOIN localized_OrchestratorService_JobStatus AS jobStatus ON (jobStatus.code = jobStatus_code),
+  MANY TO ONE JOIN localized_OrchestratorService_OrchestratorEntity AS orchestrationID ON (orchestrationID.ID = orchestrationID_ID),
+  MANY TO ONE JOIN localized_com_sap_cic_pdp_SchedulerRun AS schedulerRunID ON (schedulerRunID.ID = schedulerRunID_ID)
+)

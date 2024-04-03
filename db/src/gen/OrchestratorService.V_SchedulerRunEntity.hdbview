@@ -1,0 +1,8 @@
+VIEW OrchestratorService_V_SchedulerRunEntity AS SELECT
+  V_SchedulerRun_0.schedulerRunID,
+  V_SchedulerRun_0.executionTimeStamp,
+  V_SchedulerRun_0.jobId,
+  V_SchedulerRun_0.jobName,
+  V_SchedulerRun_0.name,
+  V_SchedulerRun_0.runStatus
+FROM com_sap_cic_pdp_V_SchedulerRun AS V_SchedulerRun_0

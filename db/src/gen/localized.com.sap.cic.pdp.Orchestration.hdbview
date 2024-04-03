@@ -1,0 +1,12 @@
+VIEW localized_com_sap_cic_pdp_Orchestration AS SELECT
+  L.ID,
+  L.createdAt,
+  L.createdBy,
+  L.modifiedAt,
+  L.modifiedBy,
+  L.orchestrationId,
+  L.orchestrationType_code
+FROM com_sap_cic_pdp_Orchestration AS L
+WITH ASSOCIATIONS (
+  MANY TO ONE JOIN localized_com_sap_cic_pdp_OrchestrationType AS orchestrationType ON (orchestrationType.code = orchestrationType_code)
+)

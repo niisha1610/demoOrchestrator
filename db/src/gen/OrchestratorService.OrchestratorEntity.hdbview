@@ -1,0 +1,12 @@
+VIEW OrchestratorService_OrchestratorEntity AS SELECT
+  Orchestration_0.ID,
+  Orchestration_0.createdAt,
+  Orchestration_0.createdBy,
+  Orchestration_0.modifiedAt,
+  Orchestration_0.modifiedBy,
+  Orchestration_0.orchestrationId,
+  Orchestration_0.orchestrationType_code
+FROM com_sap_cic_pdp_Orchestration AS Orchestration_0
+WITH ASSOCIATIONS (
+  MANY TO ONE JOIN OrchestratorService_OrchestrationType AS orchestrationType ON (orchestrationType.code = orchestrationType_code)
+)
