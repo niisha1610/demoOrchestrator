@@ -1,0 +1,59 @@
+spring:
+  config.activate.on-profile: default
+  sql.init.platform: h2
+  security:
+    oauth2:
+      client:
+        registration:
+          azure-ad:
+            client-id: "d58a81c0-e286-4863-a11e-775277612926"
+            client-secret: "_Ru8Q~WgDC.UCp~U-cHwNrzqU_GJKIHT6Q9ZBcQE"
+            authorization-grant-type: "client_credentials"
+            scope: "2ff814a6-3304-4ab8-85cb-cd0e6f879c1d/.default"
+        provider:
+          azure-ad:
+            token-uri: "https://login.microsoftonline.com/69b863e3-480a-4ee9-8bd0-20a8adb6909b/oauth2/v2.0/token"
+
+cds:
+  datasource.auto-config.enabled: false
+  sql.supportedLocales: "*"
+  remote.services:
+    - name: AdjustForecastService
+  messaging.services:
+    - name: "messaging"
+      kind: "file-based-messaging"
+      binding: "/Users/I524738/Desktop/kafka-message.txt"
+
+
+server:
+  port: 8082
+
+---
+spring:
+  config.activate.on-profile: cloud
+  sql.init.platform: h2
+  security:
+    oauth2:
+      client:
+        registration:
+          azure-ad:
+            client-id: "d58a81c0-e286-4863-a11e-775277612926"
+            client-secret: "_Ru8Q~WgDC.UCp~U-cHwNrzqU_GJKIHT6Q9ZBcQE"
+            authorization-grant-type: "client_credentials"
+            scope: "2ff814a6-3304-4ab8-85cb-cd0e6f879c1d/.default"
+        provider:
+          azure-ad:
+            token-uri: "https://login.microsoftonline.com/69b863e3-480a-4ee9-8bd0-20a8adb6909b/oauth2/v2.0/token"
+
+cds:
+  security:
+    authentication:
+      mode: never
+  datasource.auto-config.enabled: false
+  sql.supportedLocales: "*"
+  remote.services:
+    - name: AdjustForecastService
+
+logging:
+  level:
+    org.springframework: DEBUG

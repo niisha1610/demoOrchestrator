@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+  <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+    <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+  </edmx:Reference>
+  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+    <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+  </edmx:Reference>
+  <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+    <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+  </edmx:Reference>
+  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Validation.V1.xml">
+    <edmx:Include Alias="Validation" Namespace="Org.OData.Validation.V1"/>
+  </edmx:Reference>
+  <edmx:DataServices>
+    <Schema Namespace="OrchestratorService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+      <EntityContainer Name="EntityContainer">
+        <EntitySet Name="OrchestratorEntity" EntityType="OrchestratorService.OrchestratorEntity">
+          <NavigationPropertyBinding Path="orchestrationType" Target="OrchestrationType"/>
+        </EntitySet>
+        <EntitySet Name="DatabricksJobsEntity" EntityType="OrchestratorService.DatabricksJobsEntity">
+          <NavigationPropertyBinding Path="jobStatus" Target="JobStatus"/>
+          <NavigationPropertyBinding Path="orchestrationID" Target="OrchestratorEntity"/>
+        </EntitySet>
+        <EntitySet Name="SchedulerEntity" EntityType="OrchestratorService.SchedulerEntity">
+          <NavigationPropertyBinding Path="orchestration" Target="OrchestratorEntity"/>
+        </EntitySet>
+        <EntitySet Name="V_SchedulerRunEntity" EntityType="OrchestratorService.V_SchedulerRunEntity"/>
+        <EntitySet Name="OrchestrationType" EntityType="OrchestratorService.OrchestrationType">
+          <NavigationPropertyBinding Path="texts" Target="OrchestrationType_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="OrchestrationType_texts"/>
+        </EntitySet>
+        <EntitySet Name="JobStatus" EntityType="OrchestratorService.JobStatus">
+          <NavigationPropertyBinding Path="texts" Target="JobStatus_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="JobStatus_texts"/>
+        </EntitySet>
+        <EntitySet Name="OrchestrationType_texts" EntityType="OrchestratorService.OrchestrationType_texts"/>
+        <EntitySet Name="JobStatus_texts" EntityType="OrchestratorService.JobStatus_texts"/>
+        <ActionImport Name="masterDataDeltaLoad" Action="OrchestratorService.masterDataDeltaLoad" EntitySet="DatabricksJobsEntity"/>
+      </EntityContainer>
+      <EntityType Name="OrchestratorEntity">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+        <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+        <Property Name="orchestrationId" Type="Edm.Guid"/>
+        <NavigationProperty Name="orchestrationType" Type="OrchestratorService.OrchestrationType">
+          <ReferentialConstraint Property="orchestrationType_code" ReferencedProperty="code"/>
+        </NavigationProperty>
+        <Property Name="orchestrationType_code" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="DatabricksJobsEntity">
+        <Key>
+          <PropertyRef Name="ID"/>
+          <PropertyRef Name="jobId"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+        <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+        <Property Name="jobId" Type="Edm.String" MaxLength="128" Nullable="false"/>
+        <Property Name="jobName" Type="Edm.String" MaxLength="255"/>
+        <NavigationProperty Name="jobStatus" Type="OrchestratorService.JobStatus">
+          <ReferentialConstraint Property="jobStatus_code" ReferencedProperty="code"/>
+        </NavigationProperty>
+        <Property Name="jobStatus_code" Type="Edm.String"/>
+        <Property Name="jobRunID" Type="Edm.String" MaxLength="128"/>
+        <NavigationProperty Name="orchestrationID" Type="OrchestratorService.OrchestratorEntity">
+          <ReferentialConstraint Property="orchestrationID_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <Property Name="orchestrationID_ID" Type="Edm.Guid"/>
+        <Property Name="schedulerRunID_ID" Type="Edm.Guid"/>
+      </EntityType>
+      <EntityType Name="SchedulerEntity">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+        <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+        <Property Name="schedulerJobID" Type="Edm.Int64"/>
+        <Property Name="schedulerID" Type="Edm.String" MaxLength="128"/>
+        <Property Name="schedulerName" Type="Edm.String" MaxLength="20"/>
+        <Property Name="schedulerDescription" Type="Edm.String" MaxLength="50"/>
+        <Property Name="startTime" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="endTime" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="reccurance" Type="Edm.String" MaxLength="50"/>
+        <NavigationProperty Name="orchestration" Type="OrchestratorService.OrchestratorEntity">
+          <ReferentialConstraint Property="orchestration_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <Property Name="orchestration_ID" Type="Edm.Guid"/>
+      </EntityType>
+      <EntityType Name="V_SchedulerRunEntity">
+        <Property Name="schedulerRunID" Type="Edm.String" MaxLength="128"/>
+        <Property Name="executionTimeStamp" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="jobId" Type="Edm.String" MaxLength="128"/>
+        <Property Name="jobName" Type="Edm.String" MaxLength="255"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="runStatus" Type="Edm.String" MaxLength="10"/>
+      </EntityType>
+      <EntityType Name="OrchestrationType">
+        <Key>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.Int32" Nullable="false"/>
+        <Property Name="criticality" Type="Edm.Int32"/>
+        <NavigationProperty Name="texts" Type="Collection(OrchestratorService.OrchestrationType_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="OrchestratorService.OrchestrationType_texts">
+          <ReferentialConstraint Property="code" ReferencedProperty="code"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="JobStatus">
+        <Key>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.String" Nullable="false"/>
+        <NavigationProperty Name="texts" Type="Collection(OrchestratorService.JobStatus_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="OrchestratorService.JobStatus_texts">
+          <ReferentialConstraint Property="code" ReferencedProperty="code"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="OrchestrationType_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.Int32" Nullable="false"/>
+      </EntityType>
+      <EntityType Name="JobStatus_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.String" Nullable="false"/>
+      </EntityType>
+      <Action Name="masterDataDeltaLoad" IsBound="false">
+        <Parameter Name="orchestrationId" Type="Edm.Guid"/>
+        <ReturnType Type="Collection(OrchestratorService.DatabricksJobsEntity)" Nullable="false"/>
+      </Action>
+      <Annotations Target="OrchestratorService.OrchestratorEntity">
+        <Annotation Term="Core.Description" String="Aspect to capture changes by user and name&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#aspect-managed"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.OrchestratorEntity/ID">
+        <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.OrchestratorEntity/createdAt">
+        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+        <Annotation Term="Core.Immutable" Bool="true"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Common.Label" String="Data di creazione"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.OrchestratorEntity/createdBy">
+        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+        <Annotation Term="Core.Immutable" Bool="true"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Core.Description" String="ID univoco utente"/>
+        <Annotation Term="Common.Label" String="Autore creazione"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.OrchestratorEntity/modifiedAt">
+        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Common.Label" String="Data di modifica"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.OrchestratorEntity/modifiedBy">
+        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Core.Description" String="ID univoco utente"/>
+        <Annotation Term="Common.Label" String="Autore modifica"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.OrchestratorEntity/orchestrationId">
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.OrchestratorEntity/orchestrationType_code">
+        <Annotation Term="Common.ValueList">
+          <Record Type="Common.ValueListType">
+            <PropertyValue Property="Label" String="OrchestrationType"/>
+            <PropertyValue Property="CollectionPath" String="OrchestrationType"/>
+            <PropertyValue Property="Parameters">
+              <Collection>
+                <Record Type="Common.ValueListParameterInOut">
+                  <PropertyValue Property="LocalDataProperty" PropertyPath="orchestrationType_code"/>
+                  <PropertyValue Property="ValueListProperty" String="code"/>
+                </Record>
+                <Record Type="Common.ValueListParameterDisplayOnly">
+                  <PropertyValue Property="ValueListProperty" String="name"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="OrchestratorService.DatabricksJobsEntity">
+        <Annotation Term="Core.Description" String="Aspect to capture changes by user and name&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#aspect-managed"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.DatabricksJobsEntity/ID">
+        <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.DatabricksJobsEntity/createdAt">
+        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+        <Annotation Term="Core.Immutable" Bool="true"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Common.Label" String="Data di creazione"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.DatabricksJobsEntity/createdBy">
+        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+        <Annotation Term="Core.Immutable" Bool="true"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Core.Description" String="ID univoco utente"/>
+        <Annotation Term="Common.Label" String="Autore creazione"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.DatabricksJobsEntity/modifiedAt">
+        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Common.Label" String="Data di modifica"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.DatabricksJobsEntity/modifiedBy">
+        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Core.Description" String="ID univoco utente"/>
+        <Annotation Term="Common.Label" String="Autore modifica"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.DatabricksJobsEntity/jobStatus_code">
+        <Annotation Term="Common.ValueList">
+          <Record Type="Common.ValueListType">
+            <PropertyValue Property="Label" String="JobStatus"/>
+            <PropertyValue Property="CollectionPath" String="JobStatus"/>
+            <PropertyValue Property="Parameters">
+              <Collection>
+                <Record Type="Common.ValueListParameterInOut">
+                  <PropertyValue Property="LocalDataProperty" PropertyPath="jobStatus_code"/>
+                  <PropertyValue Property="ValueListProperty" String="code"/>
+                </Record>
+                <Record Type="Common.ValueListParameterDisplayOnly">
+                  <PropertyValue Property="ValueListProperty" String="name"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="OrchestratorService.SchedulerEntity">
+        <Annotation Term="Core.Description" String="Aspect to capture changes by user and name&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#aspect-managed"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.SchedulerEntity/ID">
+        <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.SchedulerEntity/createdAt">
+        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+        <Annotation Term="Core.Immutable" Bool="true"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Common.Label" String="Data di creazione"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.SchedulerEntity/createdBy">
+        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+        <Annotation Term="Core.Immutable" Bool="true"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Core.Description" String="ID univoco utente"/>
+        <Annotation Term="Common.Label" String="Autore creazione"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.SchedulerEntity/modifiedAt">
+        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Common.Label" String="Data di modifica"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.SchedulerEntity/modifiedBy">
+        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Core.Description" String="ID univoco utente"/>
+        <Annotation Term="Common.Label" String="Autore modifica"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.V_SchedulerRunEntity">
+        <Annotation Term="Core.Description" String="Aspect to capture changes by user and name&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#aspect-managed"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.V_SchedulerRunEntity/name">
+        <Annotation Term="Common.Label" String="Nome"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.OrchestrationType">
+        <Annotation Term="UI.Identification">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="name"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="Core.Description" String="Aspect for a code list with name and description&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#aspect-codelist"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.OrchestrationType/name">
+        <Annotation Term="Common.Label" String="Nome"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.OrchestrationType/descr">
+        <Annotation Term="Common.Label" String="Descrizione"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.OrchestrationType/code">
+        <Annotation Term="Validation.AllowedValues">
+          <Collection>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="InitialLoad"/>
+              <PropertyValue Property="Value" Int="1"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="AdjustForecast"/>
+              <PropertyValue Property="Value" Int="2"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="ModellingAndForecastRun"/>
+              <PropertyValue Property="Value" Int="3"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="MasterDataDeltaLoad"/>
+              <PropertyValue Property="Value" Int="4"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="OrchestratorService.JobStatus">
+        <Annotation Term="UI.Identification">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="name"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="Core.Description" String="Aspect for a code list with name and description&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#aspect-codelist"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.JobStatus/name">
+        <Annotation Term="Common.Label" String="Nome"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.JobStatus/descr">
+        <Annotation Term="Common.Label" String="Descrizione"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.JobStatus/code">
+        <Annotation Term="Validation.AllowedValues">
+          <Collection>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="PENDING"/>
+              <PropertyValue Property="Value" String="PENDING"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="SKIPPED"/>
+              <PropertyValue Property="Value" String="SKIPPED"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="SUCCEEDED"/>
+              <PropertyValue Property="Value" String="SUCCEEDED"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="FAILED"/>
+              <PropertyValue Property="Value" String="FAILED"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="TERMINATING"/>
+              <PropertyValue Property="Value" String="TERMINATING"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="TERMINATED"/>
+              <PropertyValue Property="Value" String="TERMINATED"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="INTERNAL_ERROR"/>
+              <PropertyValue Property="Value" String="INTERNAL_ERROR"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="TIMED_OUT"/>
+              <PropertyValue Property="Value" String="TIMED_OUT"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="CANCELLED"/>
+              <PropertyValue Property="Value" String="CANCELLED"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="CANCELLING"/>
+              <PropertyValue Property="Value" String="CANCELLING"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="WAITING_FOR_RETRY"/>
+              <PropertyValue Property="Value" String="WAITING_FOR_RETRY"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="OrchestratorService.OrchestrationType_texts/locale">
+        <Annotation Term="Common.Label" String="Codice lingua"/>
+        <Annotation Term="Core.Description" String="Type for a language code"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.OrchestrationType_texts/name">
+        <Annotation Term="Common.Label" String="Nome"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.OrchestrationType_texts/descr">
+        <Annotation Term="Common.Label" String="Descrizione"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.OrchestrationType_texts/code">
+        <Annotation Term="Validation.AllowedValues">
+          <Collection>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="InitialLoad"/>
+              <PropertyValue Property="Value" Int="1"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="AdjustForecast"/>
+              <PropertyValue Property="Value" Int="2"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="ModellingAndForecastRun"/>
+              <PropertyValue Property="Value" Int="3"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="MasterDataDeltaLoad"/>
+              <PropertyValue Property="Value" Int="4"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="OrchestratorService.JobStatus_texts/locale">
+        <Annotation Term="Common.Label" String="Codice lingua"/>
+        <Annotation Term="Core.Description" String="Type for a language code"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.JobStatus_texts/name">
+        <Annotation Term="Common.Label" String="Nome"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.JobStatus_texts/descr">
+        <Annotation Term="Common.Label" String="Descrizione"/>
+      </Annotations>
+      <Annotations Target="OrchestratorService.JobStatus_texts/code">
+        <Annotation Term="Validation.AllowedValues">
+          <Collection>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="PENDING"/>
+              <PropertyValue Property="Value" String="PENDING"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="SKIPPED"/>
+              <PropertyValue Property="Value" String="SKIPPED"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="SUCCEEDED"/>
+              <PropertyValue Property="Value" String="SUCCEEDED"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="FAILED"/>
+              <PropertyValue Property="Value" String="FAILED"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="TERMINATING"/>
+              <PropertyValue Property="Value" String="TERMINATING"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="TERMINATED"/>
+              <PropertyValue Property="Value" String="TERMINATED"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="INTERNAL_ERROR"/>
+              <PropertyValue Property="Value" String="INTERNAL_ERROR"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="TIMED_OUT"/>
+              <PropertyValue Property="Value" String="TIMED_OUT"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="CANCELLED"/>
+              <PropertyValue Property="Value" String="CANCELLED"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="CANCELLING"/>
+              <PropertyValue Property="Value" String="CANCELLING"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="WAITING_FOR_RETRY"/>
+              <PropertyValue Property="Value" String="WAITING_FOR_RETRY"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>
