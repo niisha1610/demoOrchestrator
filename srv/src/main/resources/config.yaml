@@ -1,0 +1,4 @@
+masterDataDeltaLoadURL: https://pdp-orchestrator-srv-adjust-forecast.c-61f6c74.kyma.ondemand.com/odata/v4/OrchestratorService/masterDataDeltaLoad
+accountName: stpdpdeltalakepoc
+containerName: pdpdeltalake
+sasToken: sp=rwdl&st=2024-01-01T10:21:02Z&se=2024-06-30T18:21:02Z&spr=https&sv=2022-11-02&sr=c&sig=CL%2Bwj7VqmxDmaqvYjoR21egnVVroJRWKagGEIAUBFgY%3D
